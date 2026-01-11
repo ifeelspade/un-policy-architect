@@ -16,6 +16,8 @@ SCOPE = [
 info = dict(st.secrets["gcp_service_account"])
 info["private_key"] = info["private_key"].replace("\\n", "\n")
 
+st.write(len(info["private_key"]))
+
 creds = Credentials.from_service_account_info(info, scopes=SCOPE)
 
 
@@ -366,5 +368,6 @@ elif st.session_state.year >= 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
