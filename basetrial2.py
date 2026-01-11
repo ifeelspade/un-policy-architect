@@ -13,8 +13,8 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = Credentials.from_service_account_file(
-     r"C:\Users\Acer\Desktop\un-policy-architect-8766944085b2.json",   # ← WINDOWS SAFE
+creds = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
     scopes=SCOPE
 )
 
@@ -365,3 +365,4 @@ elif st.session_state.year >= 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
