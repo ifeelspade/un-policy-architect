@@ -13,10 +13,11 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=SCOPE
-)
+info = dict(st.secrets["gcp_service_account"])
+info["private_key"] = info["private_key"].replace("\\n", "\n")
+
+creds = Credentials.from_service_account_info(info, scopes=SCOPE)
+
 
 client = gspread.authorize(creds)
 sheet = client.open("UN Policy Architect – Master Control").sheet1
@@ -365,4 +366,5 @@ elif st.session_state.year >= 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
