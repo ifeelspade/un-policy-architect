@@ -329,21 +329,20 @@ def calculate_turn(tax, subsidy, regulation):
     # --- Record History (FIXED) ---
 
 # Save the year for which policy is enacted
-st.session_state.enacted_year = st.session_state.year
+    st.session_state.enacted_year = st.session_state.year
+    current_year_data = s.copy()
+    current_year_data["Year"] = st.session_state.enacted_year
 
-current_year_data = s.copy()
-current_year_data["Year"] = st.session_state.enacted_year
-
-st.session_state.history = pd.concat(
-    [st.session_state.history, pd.DataFrame([current_year_data])],
-    ignore_index=True
-)
+    st.session_state.history = pd.concat(
+        [st.session_state.history, pd.DataFrame([current_year_data])],
+        ignore_index=True
+    )
 
 # Move to next year AFTER logging
-st.session_state.year += 1
+    st.session_state.year += 1
 
-trigger_random_event()
-return True, "Policy Enacted Successfully"
+    trigger_random_event()
+    return True, "Policy Enacted Successfully"
 
 
 # --- UI LAYOUT ---
@@ -471,6 +470,7 @@ elif st.session_state.year > 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
