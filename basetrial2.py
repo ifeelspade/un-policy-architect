@@ -465,11 +465,12 @@ else:
 if s['Global Temp Rise'] >= 2.0:
     st.error("❌ CRITICAL FAILURE: 2°C Warming Limit Breached. Ecological collapse imminent.")
     st.session_state.game_over = True
-elif st.session_state.year = 2051:  # <--- FIXED: using st.session_state.year
+elif st.session_state.year == 2051:  # <--- FIXED: using st.session_state.year
     score = s['GDP (Trillion $)'] + (100 - s['CO2 (Gt)']/10) + s['Public Approval']
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
