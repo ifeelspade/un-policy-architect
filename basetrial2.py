@@ -329,7 +329,9 @@ def calculate_turn(tax, subsidy, regulation):
     # --- Record History (FIXED) ---
 
 # Save the year for which policy is enacted
+   # --- Record History ---
     st.session_state.enacted_year = st.session_state.year
+
     current_year_data = s.copy()
     current_year_data["Year"] = st.session_state.enacted_year
 
@@ -338,11 +340,17 @@ def calculate_turn(tax, subsidy, regulation):
         ignore_index=True
     )
 
-# Move to next year AFTER logging
+# --- END CONDITION CHECK (BEFORE increment) ---
+    if st.session_state.enacted_year >= 2050:
+        st.session_state.game_over = True
+        return True, "Final policy enacted. Simulation complete."
+
+# Move to next year ONLY if not finished
     st.session_state.year += 1
 
     trigger_random_event()
     return True, "Policy Enacted Successfully"
+
 
 
 # --- UI LAYOUT ---
@@ -371,23 +379,36 @@ with st.sidebar:
     st.markdown("---")
 
     if st.button("Signed & Sealed ✒️", type="primary"):
-        if not st.session_state.game_over:
 
-            st.session_state.last_tax = tax_input
-            st.session_state.last_subsidy = subsidy_input
-            st.session_state.last_regulation = reg_input
-
-            success, msg = calculate_turn(
-                tax_input, subsidy_input, reg_input
-            )
-
-            if success:
-                write_to_master_sheet(sheet)
-                st.toast("Policy enacted & logged successfully ✅", icon="📊")
-            else:
-                st.error(msg)
-        else:
+        # 🚫 HARD STOP — Simulation already finished
+        if st.session_state.game_over:
             st.warning("Simulation Ended. Please reset.")
+            st.stop()
+
+        # 🧾 Store last policy inputs
+        st.session_state.last_tax = tax_input
+        st.session_state.last_subsidy = subsidy_input
+        st.session_state.last_regulation = reg_input
+
+        # ▶️ Run simulation turn
+        success, msg = calculate_turn(
+            tax_input,
+            subsidy_input,
+            reg_input
+        )
+
+        if success:
+            # 📝 Log to Master Sheet
+            write_to_master_sheet(sheet)
+
+            # 🏁 Final Year Handling
+            if st.session_state.game_over:
+                st.success("🏁 Final policy enacted. Simulation complete.")
+                st.balloons()
+            else:
+                st.toast("Policy enacted & logged successfully ✅", icon="📊")
+        else:
+            st.error(msg)
 
     if st.button("Reset Simulation"):
         for key in list(st.session_state.keys()):
@@ -465,11 +486,12 @@ else:
 if s['Global Temp Rise'] >= 2.0:
     st.error("❌ CRITICAL FAILURE: 2°C Warming Limit Breached. Ecological collapse imminent.")
     st.session_state.game_over = True
-elif st.session_state.year == 2051:  # <--- FIXED: using st.session_state.year
+elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     score = s['GDP (Trillion $)'] + (100 - s['CO2 (Gt)']/10) + s['Public Approval']
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
