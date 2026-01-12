@@ -7,6 +7,13 @@ import base64
 import gspread
 from google.oauth2.service_account import Credentials
 
+ADMIN_PAUSED = st.secrets.get("admin", {}).get("paused", False)
+
+if ADMIN_PAUSED:
+    st.error("⏸️ Simulation is currently paused by the Admin.")
+    st.info("Please wait. The session will resume shortly.")
+    st.stop()
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -367,6 +374,7 @@ elif st.session_state.year >= 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
