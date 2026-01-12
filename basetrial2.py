@@ -32,8 +32,92 @@ sheet = client.open("UN Policy Architect – Master Control").sheet1
 
 from datetime import datetime
 
+def calculate_cumulative_score(
+    initial_gdp,
+    final_gdp,
+    initial_co2,
+    final_co2,
+    final_temp,
+    political_capital,
+    renewable_pct,
+    public_approval
+):
+    # -----------------------------
+    # 1. Political Capital (25%)
+    # -----------------------------
+    political_score = max(0, min(100, political_capital))
+    political_component = 0.25 * political_score
+
+    # -----------------------------
+    # 2. GDP Stability (20%)
+    # -----------------------------
+    gdp_score = min(100, (final_gdp / initial_gdp) * 100)
+    gdp_component = 0.20 * gdp_score
+
+    # -----------------------------
+    # 3. Carbon Reduction Speed (20%)
+    # -----------------------------
+    carbon_reduction_pct = ((initial_co2 - final_co2) / initial_co2) * 100
+    carbon_score = min(100, carbon_reduction_pct * 2)
+    carbon_component = 0.20 * carbon_score
+
+    # -----------------------------
+    # 4. Temperature Score (20%)
+    # -----------------------------
+    if final_temp <= 1.2:
+        temp_score = 100
+    elif final_temp <= 1.3:
+        temp_score = 80
+    elif final_temp <= 1.4:
+        temp_score = 60
+    elif final_temp <= 1.5:
+        temp_score = 40
+    elif final_temp <= 1.7:
+        temp_score = 20
+    else:
+        temp_score = 0
+
+    temp_component = 0.20 * temp_score
+
+    # -----------------------------
+    # 5. Renewable Energy (10%)
+    # -----------------------------
+    renewable_score = min(100, renewable_pct)
+    renewable_component = 0.10 * renewable_score
+
+    # -----------------------------
+    # 6. Public Approval (5%)
+    # -----------------------------
+    approval_score = min(100, public_approval)
+    approval_component = 0.05 * approval_score
+
+    # -----------------------------
+    # FINAL SCORE
+    # -----------------------------
+    final_score = (
+        political_component
+        + gdp_component
+        + carbon_component
+        + temp_component
+        + renewable_component
+        + approval_component
+    )
+
+    return round(final_score, 2)
+
 def write_to_master_sheet(sheet):
     s = st.session_state.stats
+
+    cumulative_score = calculate_cumulative_score(
+        initial_gdp=5.0,                     # Starting GDP
+        final_gdp=s['GDP (Trillion $)'],
+        initial_co2=450,                     # Starting CO2
+        final_co2=s['CO2 (Gt)'],
+        final_temp=s['Global Temp Rise'],
+        political_capital=s['Political Capital'],
+        renewable_pct=s['Renewable %'],
+        public_approval=s['Public Approval']
+    )
 
     row = [
         datetime.now().strftime("%Y-%m-%d %H:%M:%S"),   # Timestamp
@@ -49,7 +133,8 @@ def write_to_master_sheet(sheet):
         s['Political Capital'],                         # Political_Capital
         round(s['Global Temp Rise'], 2),                # Global_Temp_Rise
         st.session_state.last_event,                    # Event_Name
-        "ONGOING" if not st.session_state.game_over else "ENDED"  # Game_Status
+        "ONGOING" if not st.session_state.game_over else "ENDED", # Game_Status
+        cumulative_score
     ]
 
     sheet.append_row(row, value_input_option="USER_ENTERED")
@@ -374,6 +459,7 @@ elif st.session_state.year >= 2050:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
