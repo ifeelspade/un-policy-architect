@@ -46,7 +46,7 @@ def calculate_cumulative_score(
     # 1. Political Capital (25%)
     # -----------------------------
     political_score = max(0, min(100, political_capital))
-    political_component = 0.22 * political_score
+    political_component = 0.18 * political_score
 
     # -----------------------------
     # 2. GDP Stability (20%)
@@ -64,10 +64,8 @@ def calculate_cumulative_score(
     # -----------------------------
     # 4. Temperature Score (20%)
     # -----------------------------
-    if final_temp <= 1.2:
+    if final_temp <= 1.3:
         temp_score = 100
-    elif final_temp <= 1.3:
-        temp_score = 80
     elif final_temp <= 1.4:
         temp_score = 60
     elif final_temp <= 1.5:
@@ -83,13 +81,13 @@ def calculate_cumulative_score(
     # 5. Renewable Energy (10%)
     # -----------------------------
     renewable_score = min(100, renewable_pct)
-    renewable_component = 0.10 * renewable_score
+    renewable_component = 0.12 * renewable_score
 
     # -----------------------------
     # 6. Public Approval (5%)
     # -----------------------------
     approval_score = min(100, public_approval)
-    approval_component = 0.10 * approval_score
+    approval_component = 0.12 * approval_score
 
     # -----------------------------
     # FINAL SCORE
@@ -305,7 +303,7 @@ def calculate_turn(tax, subsidy, regulation):
     s['GDP (Trillion $)'] *= (1 + gdp_growth)
     
     # Environment
-    co2_reduction = (tax * 5) + (subsidy * 4) + (regulation * 3)
+    co2_reduction = (tax * 3.5) + (subsidy * 2.5) + (regulation * 2)
     s['CO2 (Gt)'] -= co2_reduction
     s['Renewable %'] += (subsidy * 1.5)
     
@@ -490,6 +488,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
