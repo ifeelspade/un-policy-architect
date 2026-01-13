@@ -154,10 +154,6 @@ st.set_page_config(
 # ----------------------------------------------------
 if "page" not in st.session_state:
     st.session_state.page = "landing"
-if "processing_turn" not in st.session_state:
-    st.session_state.processing_turn = False
-
-
 # ----------------------------------------------------
 # UTILS
 # ----------------------------------------------------
@@ -381,12 +377,7 @@ with st.sidebar:
 
     st.markdown("---")
 
-    if st.session_state.processing_turn:
-        st.info("⏳ Processing policy… please wait")
-
-    if st.button("Signed & Sealed ✒️", type="primary",disabled=st.session_state.processing_turn):
-
-        st.session_state.processing_turn = True
+    if st.button("Signed & Sealed ✒️", type="primary"):
 
         # 🚫 HARD STOP — Simulation already finished
         if st.session_state.game_over:
@@ -417,8 +408,6 @@ with st.sidebar:
                 st.toast("Policy enacted & logged successfully ✅", icon="📊")
         else:
             st.error(msg)
-
-    st.session_state.processing_turn = False
 
     if st.button("Reset Simulation"):
         for key in list(st.session_state.keys()):
@@ -501,6 +490,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
