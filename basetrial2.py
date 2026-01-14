@@ -6,6 +6,8 @@ import os
 import base64
 import gspread
 from google.oauth2.service_account import Credentials
+import time
+from gspread.exceptions import APIError
 
 ADMIN_PAUSED = st.secrets.get("admin", {}).get("paused", False)
 
@@ -120,7 +122,7 @@ def write_to_master_sheet(sheet):
     row = [
         datetime.now().strftime("%Y-%m-%d %H:%M:%S"),   # Timestamp
         st.session_state.team_name,                     # Team_Name
-        st.session_state.enacted_year,                      # Simulation_Year
+        st.session_state.enacted_year,                  # Simulation_Year
         st.session_state.last_tax,                      # Carbon_Tax
         st.session_state.last_subsidy,                  # Green_Subsidy
         st.session_state.last_regulation,               # Regulation_Level
@@ -131,11 +133,19 @@ def write_to_master_sheet(sheet):
         s['Political Capital'],                         # Political_Capital
         round(s['Global Temp Rise'], 2),                # Global_Temp_Rise
         st.session_state.last_event,                    # Event_Name
-        "ONGOING" if not st.session_state.game_over else "ENDED", # Game_Status
+        "ONGOING" if not st.session_state.game_over else "ENDED",
         cumulative_score
     ]
 
-    sheet.append_row(row, value_input_option="USER_ENTERED")
+    # ✅ SAFE APPEND (NO CRASH)
+    for attempt in range(5):
+        try:
+            sheet.append_row(row, value_input_option="USER_ENTERED")
+            break
+        except APIError:
+            if attempt == 4:
+                raise
+            time.sleep(2 ** attempt)
 
 
 # ----------------------------------------------------
@@ -488,6 +498,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
