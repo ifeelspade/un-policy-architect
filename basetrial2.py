@@ -29,8 +29,16 @@ info["private_key"] = info["private_key"].replace("\\n", "\n")
 creds = Credentials.from_service_account_info(info, scopes=SCOPE)
 
 
-client = gspread.authorize(creds)
-sheet = client.open("UN Policy Architect – Master Control").sheet1
+@st.cache_resource
+def get_master_sheet():
+    for attempt in range(5):
+        try:
+            client = gspread.authorize(creds)
+            return client.open("UN Policy Architect – Master Control").sheet1
+        except APIError:
+            if attempt == 4:
+                raise
+            time.sleep(2 ** attempt)
 
 from datetime import datetime
 
@@ -406,7 +414,9 @@ with st.sidebar:
 
         if success:
             # 📝 Log to Master Sheet
+            sheet = get_master_sheet()
             write_to_master_sheet(sheet)
+
 
             # 🏁 Final Year Handling
             if st.session_state.game_over:
@@ -498,6 +508,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
