@@ -5,6 +5,7 @@ import random
 import os
 import base64
 import gspread
+import math
 from google.oauth2.service_account import Credentials
 import time
 from gspread.exceptions import APIError
@@ -573,6 +574,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
