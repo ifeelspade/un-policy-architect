@@ -322,7 +322,7 @@ def calculate_turn(tax, subsidy, regulation):
     # ECONOMICS (BALANCED)
     # ======================
     
-    BASE_GDP_GROWTH = 0.022   # 2.2% natural growth
+    BASE_GDP_GROWTH = 0.032   # 3.2% natural growth
     
     tax_drag = 0.0025 * tax
     reg_drag = 0.0015 * regulation
@@ -341,9 +341,9 @@ def calculate_turn(tax, subsidy, regulation):
     # ======================
     
     co2_reduction = (
-        (tax * 2.5) +
-        (subsidy * 3.5) +
-        (regulation * 3.0)
+        (tax * 3) +
+        (subsidy * 4) +
+        (regulation * 3.5)
     )
     
     # Cap yearly impact
@@ -356,7 +356,7 @@ def calculate_turn(tax, subsidy, regulation):
     # RENEWABLES (FAST EARLY, SLOW LATE)
     # ======================
     
-    renewable_growth = subsidy * 1.4
+    renewable_growth = subsidy * 2
     renewable_growth *= (1 - s['Renewable %'] / 110)  # softer saturation
     
     s['Renewable %'] += renewable_growth
@@ -569,6 +569,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
