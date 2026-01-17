@@ -317,7 +317,7 @@ def calculate_turn(tax, subsidy, regulation):
     
 
     # Economics
-    gdp_growth = 0.03 - (tax * 0.002) - (regulation * 0.001) + (subsidy * 0.0015)
+    gdp_growth = 0.02 - (tax * 0.002) - (regulation * 0.001) + (subsidy * 0.0015)
     s['GDP (Trillion $)'] *= (1 + gdp_growth)
     
     # Environment
@@ -506,6 +506,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
