@@ -323,7 +323,7 @@ def calculate_turn(tax, subsidy, regulation):
     s['GDP (Trillion $)'] *= (1 + gdp_growth)
     
     # Environment
-    co2_reduction = (tax * 3.5) + (subsidy * 3) + (regulation * 2.5)
+    co2_reduction = (tax * 3.2) + (subsidy * 2.7) + (regulation * 2.2)
     s['CO2 (Gt)'] -= co2_reduction
     s['Renewable %'] += (subsidy * 1.2)
     
@@ -333,7 +333,7 @@ def calculate_turn(tax, subsidy, regulation):
     
     # Public Opinion
     approval_change = 0
-    if gdp_growth < 0: approval_change -= 5
+    if gdp_growth < 0: approval_change -= 2
     if s['Global Temp Rise'] > 1.5: approval_change -= 5
     if subsidy > 5: approval_change += 3
     s['Public Approval'] = max(0, min(100, s['Public Approval'] + approval_change))
@@ -508,6 +508,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
