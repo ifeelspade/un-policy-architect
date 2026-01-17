@@ -316,29 +316,94 @@ def calculate_turn(tax, subsidy, regulation):
     s['Political Capital'] -= cost
     s['Political Capital'] += 20 # Natural regeneration per turn
     
-    # Economics
-    gdp_growth = 0.03 - (tax * 0.002) - (regulation * 0.001) + (subsidy * 0.0015)
-    s['GDP (Trillion $)'] *= (1 + gdp_growth)
-    
-    # Environment
-    co2_reduction = (tax * 3) + (subsidy * 4) + (regulation * 5)
-    s['CO2 (Gt)'] -= co2_reduction
-    s['Renewable %'] += (subsidy * 1.5)
-    
-    # Feedback Loops
-    if s['CO2 (Gt)'] > 400: s['Global Temp Rise'] += 0.05
-    else: s['Global Temp Rise'] += 0.01
-    
-    # Public Opinion
-    approval_change = 0
-    if gdp_growth < 0: approval_change -= 5
-    if s['Global Temp Rise'] > 1.5: approval_change -= 5
-    if subsidy > 5: approval_change += 3
-    s['Public Approval'] = max(0, min(100, s['Public Approval'] + approval_change))
 
-    # Clamp values
-    s['Renewable %'] = min(100, s['Renewable %'])
-    s['CO2 (Gt)'] = max(0, s['CO2 (Gt)'])
+# =============================
+# ECONOMICS (STABLE & REALISTIC)
+# =============================
+
+BASE_GDP_GROWTH = 0.018        # 1.8% natural growth
+MAX_POLICY_DRAG = 0.025       # max GDP loss from policy pressure
+
+tax_drag = MAX_POLICY_DRAG * (1 - math.exp(-tax / 8))
+reg_drag = MAX_POLICY_DRAG * (1 - math.exp(-regulation / 6))
+subsidy_boost = 0.015 * (1 - math.exp(-subsidy / 10))
+
+gdp_growth = BASE_GDP_GROWTH - tax_drag - reg_drag + subsidy_boost
+
+# Clamp GDP growth for stability
+gdp_growth = max(-0.02, min(0.04, gdp_growth))
+
+s['GDP (Trillion $)'] *= (1 + gdp_growth)
+
+
+# =============================
+# ENVIRONMENT (CO₂ WITH CAPS)
+# =============================
+
+MAX_CO2_REDUCTION = 18  # Gt per year cap
+
+co2_reduction = MAX_CO2_REDUCTION * (
+    0.40 * (1 - math.exp(-tax / 10)) +
+    0.35 * (1 - math.exp(-subsidy / 12)) +
+    0.25 * (1 - math.exp(-regulation / 8))
+)
+
+s['CO2 (Gt)'] -= co2_reduction
+
+
+# =============================
+# RENEWABLE ENERGY (S-CURVE)
+# =============================
+
+renewable_growth = 4 * (1 - math.exp(-subsidy / 10))
+renewable_growth *= (1 - s['Renewable %'] / 100)  # slows near 100%
+
+s['Renewable %'] += renewable_growth
+
+
+# =============================
+# CLIMATE INERTIA (TEMP)
+# =============================
+
+if s['CO2 (Gt)'] > 420:
+    s['Global Temp Rise'] += 0.03
+elif s['CO2 (Gt)'] > 350:
+    s['Global Temp Rise'] += 0.015
+else:
+    s['Global Temp Rise'] += 0.006
+
+
+# =============================
+# PUBLIC OPINION (DAMPED)
+# =============================
+
+approval_change = 0
+
+if gdp_growth < 0:
+    approval_change -= 3
+
+if s['Global Temp Rise'] > 1.5:
+    approval_change -= 4
+
+if subsidy > 6:
+    approval_change += 2
+
+# Damping factor to avoid swings
+approval_change *= 0.6
+
+s['Public Approval'] = max(
+    0,
+    min(100, s['Public Approval'] + approval_change)
+)
+
+
+# =============================
+# FINAL SAFETY CLAMPS
+# =============================
+
+s['CO2 (Gt)'] = max(0, s['CO2 (Gt)'])
+s['Renewable %'] = min(100, s['Renewable %'])
+
     
 
     # --- Record History (FIXED) ---
@@ -508,6 +573,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
