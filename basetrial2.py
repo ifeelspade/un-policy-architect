@@ -318,81 +318,76 @@ def calculate_turn(tax, subsidy, regulation):
     s['Political Capital'] += 20 # Natural regeneration per turn
     
 
-# ======================
-# ECONOMICS (STABILIZED)
-# ======================
-
-    BASE_GDP_GROWTH = 0.02   # 2% natural growth
-    POLICY_DRAG_CAP = 0.025
+    # ======================
+    # ECONOMICS (BALANCED)
+    # ======================
     
-    tax_drag = POLICY_DRAG_CAP * (1 - math.exp(-tax / 6))
-    reg_drag = POLICY_DRAG_CAP * (1 - math.exp(-regulation / 5))
-    subsidy_boost = 0.018 * (1 - math.exp(-subsidy / 8))
+    BASE_GDP_GROWTH = 0.022   # 2.2% natural growth
+    
+    tax_drag = 0.0025 * tax
+    reg_drag = 0.0015 * regulation
+    subsidy_boost = 0.002 * subsidy
     
     gdp_growth = BASE_GDP_GROWTH - tax_drag - reg_drag + subsidy_boost
     
-    # Hard clamp for realism
-    gdp_growth = max(-0.02, min(0.04, gdp_growth))
+    # Clamp to avoid extremes
+    gdp_growth = max(-0.025, min(0.05, gdp_growth))
     
     s['GDP (Trillion $)'] *= (1 + gdp_growth)
     
     
     # ======================
-    # ENVIRONMENT (DAMPED)
+    # ENVIRONMENT (VISIBLE)
     # ======================
     
-    MAX_CO2_REDUCTION = 15  # cap per year
-    
-    co2_reduction = MAX_CO2_REDUCTION * (
-        0.4 * (1 - math.exp(-tax / 8)) +
-        0.35 * (1 - math.exp(-subsidy / 10)) +
-        0.25 * (1 - math.exp(-regulation / 6))
+    co2_reduction = (
+        (tax * 2.5) +
+        (subsidy * 3.5) +
+        (regulation * 3.0)
     )
+    
+    # Cap yearly impact
+    co2_reduction = min(co2_reduction, 22)
     
     s['CO2 (Gt)'] -= co2_reduction
     
     
     # ======================
-    # RENEWABLES (S-CURVE)
+    # RENEWABLES (FAST EARLY, SLOW LATE)
     # ======================
     
-    renewable_growth = 3.5 * (1 - math.exp(-subsidy / 8))
-    renewable_growth *= (1 - s['Renewable %'] / 100)  # saturation
+    renewable_growth = subsidy * 1.4
+    renewable_growth *= (1 - s['Renewable %'] / 110)  # softer saturation
     
     s['Renewable %'] += renewable_growth
     
     
     # ======================
-    # TEMPERATURE (INERTIA)
+    # TEMPERATURE (RESPONSIVE)
     # ======================
     
     if s['CO2 (Gt)'] > 420:
-        temp_change = 0.03
-    elif s['CO2 (Gt)'] > 360:
-        temp_change = 0.015
+        s['Global Temp Rise'] += 0.035
+    elif s['CO2 (Gt)'] > 370:
+        s['Global Temp Rise'] += 0.02
     else:
-        temp_change = 0.006
-    
-    s['Global Temp Rise'] += temp_change
+        s['Global Temp Rise'] += 0.01
     
     
     # ======================
-    # PUBLIC OPINION (DAMPED)
+    # PUBLIC OPINION (NOTICEABLE)
     # ======================
     
     approval_change = 0
     
     if gdp_growth < 0:
-        approval_change -= 3
-    
-    if s['Global Temp Rise'] > 1.5:
         approval_change -= 4
     
-    if subsidy > 5:
-        approval_change += 2
+    if s['Global Temp Rise'] > 1.4:
+        approval_change -= 4
     
-    # damping factor
-    approval_change *= 0.6
+    if subsidy >= 5:
+        approval_change += 3
     
     s['Public Approval'] = max(
         0,
@@ -406,7 +401,6 @@ def calculate_turn(tax, subsidy, regulation):
     
     s['Renewable %'] = min(100, s['Renewable %'])
     s['CO2 (Gt)'] = max(0, s['CO2 (Gt)'])
-    
 
     # --- Record History (FIXED) ---
 
@@ -575,6 +569,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
