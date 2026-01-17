@@ -77,10 +77,8 @@ def calculate_cumulative_score(
     # -----------------------------
     if final_temp <= 1.3:
         temp_score = 100
-    elif final_temp <= 1.4:
-        temp_score = 60
     elif final_temp <= 1.5:
-        temp_score = 40
+        temp_score = 60
     elif final_temp <= 1.7:
         temp_score = 20
     else:
@@ -508,6 +506,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
