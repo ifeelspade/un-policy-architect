@@ -196,20 +196,7 @@ if st.session_state.page == "landing":
             color: #ffffff !important;
         }}
         
-        /* Streamlit metrics */
-        [data-testid="stMetricValue"],
-        [data-testid="stMetricLabel"] {{
-            color: #ffffff !important;
-        }}
-        
-        /* Sidebar text only */
-        section[data-testid="stSidebar"] p,
-        section[data-testid="stSidebar"] span,
-        section[data-testid="stSidebar"] div {{
-            color: #ffffff !important;
-        }}
-        
-        /* Tabs text */
+       
     
         .stApp {{
             background-image:
@@ -527,6 +514,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
