@@ -191,7 +191,7 @@ if st.session_state.page == "landing":
         f"""
         <style>
        /* Headings & normal text only */
-        h1, h2, h3, h4, h5, h6,
+        h1, h2, h3, h4, h5, h6, p,
         {{
             color: #ffffff !important;
         }}
