@@ -210,9 +210,7 @@ if st.session_state.page == "landing":
         }}
         
         /* Tabs text */
-        button[data-baseweb="tab"] span {{
-            color: #ffffff !important;
-        }}
+    
         .stApp {{
             background-image:
                 linear-gradient(rgba(10,15,25,0.9), rgba(10,15,25,0.9)),
@@ -529,6 +527,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
