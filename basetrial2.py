@@ -190,6 +190,36 @@ if st.session_state.page == "landing":
     st.markdown(
         f"""
         <style>
+        /* Force white text everywhere */
+    html, body, [class*="css"] {
+        color: #ffffff !important;
+    }
+    
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff !important;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricLabel"] {
+        color: #ffffff !important;
+    }
+    
+    /* Sidebar text */
+    section[data-testid="stSidebar"] * {
+        color: #ffffff !important;
+    }
+    
+    /* Tabs */
+    button[data-baseweb="tab"] {
+        color: #ffffff !important;
+    }
+    
+    /* Slider labels */
+    label, span {
+        color: #ffffff !important;
+    }
         .stApp {{
             background-image:
                 linear-gradient(rgba(10,15,25,0.9), rgba(10,15,25,0.9)),
@@ -506,6 +536,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
