@@ -195,16 +195,16 @@ if st.session_state.page == "landing":
         p, label {{
             color: #ffffff !important;
         }}
-        /* PRIMARY BUTTON */
+        /* PRIMARY BUTTON BASE */
         button[data-testid="baseButton-primary"] {{
             background-color: #0f172a !important;
             border: 1px solid #334155 !important;
         }}
         
-        /* BUTTON TEXT */
-        button[data-testid="baseButton-primary"] span {{
+        /* FORCE TEXT COLOR (INITIAL STATE) */
+        button[data-testid="baseButton-primary"] * {{
             color: #ffffff !important;
-            font-weight: 600;
+            fill: #ffffff !important;
         }}
         
         /* HOVER */
@@ -527,6 +527,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
