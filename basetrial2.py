@@ -197,29 +197,46 @@ if st.session_state.page == "landing":
         }}
         /* PRIMARY BUTTON — ALL STATES */
         button[kind="primary"],
+        button[data-testid="stBaseButton-primary"],
         button[data-testid="baseButton-primary"] {{
-            background-color: #020617 !important;   /* dark */
+            background-color: #020617 !important;
             color: #ffffff !important;
             border: 1px solid #334155 !important;
         }}
         
-        /* INNER BUTTON CONTENT (THIS IS THE MISSING PIECE) */
+        /* INNER CONTAINER (CRITICAL FIX) */
         button[kind="primary"] > div,
+        button[data-testid="stBaseButton-primary"] > div,
         button[data-testid="baseButton-primary"] > div {{
             background-color: #020617 !important;
-            color: #ffffff !important;
         }}
         
         /* TEXT INSIDE BUTTON */
         button[kind="primary"] span,
+        button[data-testid="stBaseButton-primary"] span,
         button[data-testid="baseButton-primary"] span {{
             color: #ffffff !important;
         }}
         
-        /* HOVER */
-        button[data-testid="baseButton-primary"]:hover {{
+        /* HOVER / FOCUS / ACTIVE (ALL STATES) */
+        button[kind="primary"]:hover,
+        button[kind="primary"]:focus,
+        button[kind="primary"]:active,
+        button[data-testid="stBaseButton-primary"]:hover,
+        button[data-testid="stBaseButton-primary"]:focus,
+        button[data-testid="stBaseButton-primary"]:active {{
             background-color: #020617 !important;
         }}
+        
+        button[kind="primary"]:hover > div,
+        button[kind="primary"]:focus > div,
+        button[kind="primary"]:active > div,
+        button[data-testid="stBaseButton-primary"]:hover > div,
+        button[data-testid="stBaseButton-primary"]:focus > div,
+        button[data-testid="stBaseButton-primary"]:active > div {{
+            background-color: #020617 !important;
+        }}
+
         .stApp {{
             background-image:
                 linear-gradient(rgba(10,15,25,0.9), rgba(10,15,25,0.9)),
@@ -536,6 +553,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
