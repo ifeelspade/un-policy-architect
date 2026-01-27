@@ -296,6 +296,14 @@ st.markdown(
         p, label {{
             color: #ffffff !important;
         }}
+        /* SECONDARY BUTTON (Reset Simulation) */
+        button[data-testid="baseButton-secondary"] {{
+            background-color: #020617 !important;   /* dark */
+            color: white !important;
+            border: 1px solid #334155 !important;
+            border-radius: 10px !important;
+            opacity: 1 !important;
+        }}
     .stApp {{
         background-image:
             linear-gradient(rgba(10,15,25,0.85), rgba(10,15,25,0.85)),
@@ -477,7 +485,7 @@ with st.sidebar:
         else:
             st.error(msg)
 
-    if st.button("Reset Simulation"):
+    if st.button("Reset Simulation",type="secondary"):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
         st.rerun()
@@ -558,6 +566,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
