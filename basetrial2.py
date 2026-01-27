@@ -195,6 +195,20 @@ if st.session_state.page == "landing":
         p, label {{
             color: #ffffff !important;
         }}
+        /* Enter Simulation / all primary buttons */
+        button[kind="primary"], 
+        button[data-testid="baseButton-primary"] {{
+            background-color: #0f172a !important;   /* dark navy */
+            color: #ffffff !important;              /* white text */
+            border: 1px solid #334155 !important;
+        }}
+        
+        /* Hover state */
+        button[kind="primary"]:hover,
+        button[data-testid="baseButton-primary"]:hover {{
+            background-color: #020617 !important;
+            color: #ffffff !important;
+        }}
         .stApp {{
             background-image:
                 linear-gradient(rgba(10,15,25,0.9), rgba(10,15,25,0.9)),
@@ -511,6 +525,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
