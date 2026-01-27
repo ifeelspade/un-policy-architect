@@ -191,13 +191,10 @@ if st.session_state.page == "landing":
         f"""
         <style>
        /* Headings & normal text only */
-        h1, h2, h3, h4, h5, h6, p, label,
-        {{
+        h1, h2, h3, h4, h5, h6,
+        p, label {{
             color: #ffffff !important;
         }}
-        
-       
-    
         .stApp {{
             background-image:
                 linear-gradient(rgba(10,15,25,0.9), rgba(10,15,25,0.9)),
@@ -514,6 +511,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
