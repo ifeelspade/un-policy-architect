@@ -254,7 +254,7 @@ if st.session_state.page == "landing":
 
     team_name = st.text_input("Enter your Team Name")
 
-    if st.button("Enter Simulation"):
+    if st.button("Enter Simulation",type="primary"):
         if team_name.strip() == "":
             st.warning("Please enter a team name")
         else:
@@ -553,6 +553,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
