@@ -53,64 +53,50 @@ def calculate_cumulative_score(
     renewable_pct,
     public_approval
 ):
-    # -----------------------------
     # 1. Political Capital (25%)
-    # -----------------------------
     political_score = max(0, min(100, political_capital))
-    political_component = 0.18 * political_score
+    political_component = 0.25 * political_score
 
-    # -----------------------------
     # 2. GDP Stability (20%)
-    # -----------------------------
-    gdp_score = min(100, (final_gdp / initial_gdp) * 100)
-    gdp_component = 0.18 * gdp_score
+    gdp_growth_pct = ((final_gdp - initial_gdp) / initial_gdp) * 100
+    gdp_score = max(0, min(100, 50 + gdp_growth_pct))
+    gdp_component = 0.20 * gdp_score
 
-    # -----------------------------
-    # 3. Carbon Reduction Speed (20%)
-    # -----------------------------
-    carbon_reduction_pct = ((initial_co2 - final_co2) / initial_co2) * 100
-    carbon_score = min(100, carbon_reduction_pct * 2)
-    carbon_component = 0.25 * carbon_score
+    # 3. Carbon Reduction (20%)
+    carbon_reduction_pct = max(0, ((initial_co2 - final_co2) / initial_co2) * 100)
+    carbon_score = min(100, carbon_reduction_pct)
+    carbon_component = 0.20 * carbon_score
 
-    # -----------------------------
-    # 4. Temperature Score (20%)
-    # -----------------------------
+    # 4. Temperature Control (20%)
     if final_temp <= 1.3:
         temp_score = 100
     elif final_temp <= 1.5:
-        temp_score = 60
+        temp_score = 70
     elif final_temp <= 1.7:
-        temp_score = 20
+        temp_score = 40
     else:
         temp_score = 0
+    temp_component = 0.20 * temp_score
 
-    temp_component = 0.15 * temp_score
-
-    # -----------------------------
     # 5. Renewable Energy (10%)
-    # -----------------------------
     renewable_score = min(100, renewable_pct)
-    renewable_component = 0.12 * renewable_score
+    renewable_component = 0.10 * renewable_score
 
-    # -----------------------------
     # 6. Public Approval (5%)
-    # -----------------------------
     approval_score = min(100, public_approval)
-    approval_component = 0.12 * approval_score
+    approval_component = 0.05 * approval_score
 
-    # -----------------------------
-    # FINAL SCORE
-    # -----------------------------
     final_score = (
-        political_component
-        + gdp_component
-        + carbon_component
-        + temp_component
-        + renewable_component
-        + approval_component
+        political_component +
+        gdp_component +
+        carbon_component +
+        temp_component +
+        renewable_component +
+        approval_component
     )
 
     return round(final_score, 2)
+
 
 def write_to_master_sheet(sheet):
     s = st.session_state.stats
@@ -566,6 +552,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
