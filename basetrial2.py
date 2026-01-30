@@ -70,7 +70,7 @@ TEAM_CREDENTIALS = {
     "Big Brain Energy": "bigbrainenergy@2050",
     "KINTSUGI": "kintsugi@2050",
     "Alchemists": "alchemists@2050"
-    "spade papa": "spadepapa"
+    "spade papa": "spadepapa@2050"
 }
 
 
@@ -621,6 +621,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
