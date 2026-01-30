@@ -37,6 +37,7 @@ TEAM_CREDENTIALS = {
     "Nebula Titans": "nebulatitans@2050",
     "Redemption Arc": "redemptionarc@2050",
     "Dynamo": "dynamo@2050",
+    "Data Dynamos 1": "datadynamos1@2050",
     "Data Dynamos 2": "datadynamos2@2050",
     "ScarFace": "scarface@2050",
     "Strive Squad": "strivesquad@2050",
@@ -621,6 +622,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
