@@ -29,6 +29,50 @@ info["private_key"] = info["private_key"].replace("\\n", "\n")
 
 creds = Credentials.from_service_account_info(info, scopes=SCOPE)
 
+TEAM_CREDENTIALS = {
+    "Ssbian": "ssbian@2050",
+    "Quantum": "quantum@2050",
+    "SWOT": "swot@2050",
+    "Hilltop": "hilltop@2050",
+    "Nebula Titans": "nebulatitans@2050",
+    "Redemption Arc": "redemptionarc@2050",
+    "Dynamo": "dynamo@2050",
+    "Data Dynamos 2": "datadynamos2@2050",
+    "ScarFace": "scarface@2050",
+    "Strive Squad": "strivesquad@2050",
+    "The Boys": "theboys@2050",
+    "Scalene Traingle": "scalenetriangle@2050",
+    "724": "724@2050",
+    "Innovators": "innovators@2050",
+    "TEAM QUANTA": "teamquanta@2050",
+    "Error 404": "error404@2050",
+    "Cuboid": "cuboid@2050",
+    "Dil Se FORSE": "dilseforse@2050",
+    "Brainy": "brainy@2050",
+    "Matheletees": "matheletees@2050",
+    "Team": "team@2050",
+    "Team Dhurandhars": "teamdhurandhars@2050",
+    "The Capital Crusaders": "thecapitalcrusaders@2050",
+    "Competitive Wizards": "competitivewizards@2050",
+    "Quantwizard": "quantwizard@2050",
+    "Quantums": "quantums@2050",
+    "Team Bravo": "teambravo@2050",
+    "Quantum Cubed": "quantumcubed@2050",
+    "MATAnalytics": "matanalytics@2050",
+    "The Dark Duo": "thedarkduo@2050",
+    "Team Classic": "teamclassic@2050",
+    "SAPiens": "sapiens@2050",
+    "Zenith": "zenith@2050",
+    "Dipesh and Haard": "dipeshandhaard@2050",
+    "Decor X": "decorx@2050",
+    "Surror": "surror@2050",
+    "Mindless Minions": "mindlessminions@2050",
+    "Big Brain Energy": "bigbrainenergy@2050",
+    "KINTSUGI": "kintsugi@2050",
+    "Alchemists": "alchemists@2050"
+    "spade papa": "spadepapa"
+}
+
 
 @st.cache_resource
 def get_master_sheet():
@@ -250,18 +294,30 @@ if st.session_state.page == "landing":
 
     st.title("🌍 UN Policy Architect 2050")
     st.subheader("Team Registration")
-
+    
     team_name = st.text_input("Enter your Team Name")
-
-    if st.button("Enter Simulation",type="primary"):
-        if team_name.strip() == "":
-            st.warning("Please enter a team name")
+    team_password = st.text_input("Enter Team Password", type="password")
+    
+    if st.button("Enter Simulation", type="primary"):
+        if team_name.strip() == "" or team_password.strip() == "":
+            st.warning("Please enter both team name and password")
+    
+        elif team_name not in TEAM_CREDENTIALS:
+            st.error("Invalid team name")
+    
+        elif TEAM_CREDENTIALS[team_name] != team_password:
+            st.error("Incorrect password")
+    
         else:
+            # ✅ AUTH SUCCESS
             st.session_state.team_name = team_name
+            st.session_state.authenticated = True
             st.session_state.page = "simulation"
+            st.success("Authentication successful")
             st.rerun()
+    
+    st.stop()  # ⛔ Prevents simulation from loading without auth
 
-    st.stop()  # ⛔ CRITICAL — stops simulation from loading
 
 # ----------------------------------------------------
 # SIMULATION PAGE GUARD
@@ -565,6 +621,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
