@@ -46,7 +46,6 @@ TEAM_CREDENTIALS = {
     "Brainy": "brainy@2050",
     "Matheletees": "matheletees@2050",
     "Competitive Wizards": "competitivewizards@2050",
-    "Quantwizard": "quantwizard@2050",
     "Quantums": "quantums@2050",
     "Team Bravo": "teambravo@2050",
     "Quantum Cubed": "quantumcubed@2050",
@@ -611,6 +610,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
