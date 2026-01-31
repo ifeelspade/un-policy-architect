@@ -13,8 +13,8 @@ from gspread.exceptions import APIError
 ADMIN_PAUSED = st.secrets.get("admin", {}).get("paused", False)
 
 if ADMIN_PAUSED:
-    st.error("⏸️ Simulation is currently paused by the Admin.")
-    st.info("Please wait. The session will resume shortly.")
+    st.success("✅ Thanks for attending the simulation!")
+    st.info("📢 We will be announcing the shortlist soon. Please stay tuned.")
     st.stop()
 
 
@@ -602,6 +602,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
