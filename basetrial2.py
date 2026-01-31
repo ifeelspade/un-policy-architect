@@ -51,7 +51,6 @@ TEAM_CREDENTIALS = {
     "Team Bravo": "teambravo@2050",
     "Quantum Cubed": "quantumcubed@2050",
     "MATAnalytics": "matanalytics@2050",
-    "The Dark Duo": "thedarkduo@2050",
     "Team Classic": "teamclassic@2050",
     "SAPiens": "sapiens@2050",
     "Zenith": "zenith@2050",
@@ -612,6 +611,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
