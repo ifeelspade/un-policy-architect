@@ -31,7 +31,6 @@ creds = Credentials.from_service_account_info(info, scopes=SCOPE)
 
 TEAM_CREDENTIALS = {
     "Ssbian": "ssbian@2050",
-    "Quantum": "quantum@2050",
     "SWOT": "swot@2050",
     "Hilltop": "hilltop@2050",
     "Nebula Titans": "nebulatitans@2050",
@@ -620,6 +619,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
