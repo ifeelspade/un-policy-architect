@@ -105,7 +105,7 @@ def calculate_cumulative_score(
 ):
     # 1. Political Capital (25%)
     political_score = clamp(political_capital, 0, 100)
-    political_component = 0.20 * political_score
+    political_component = 0.15 * political_score
 
     # 2. GDP Stability (20%)
     if initial_gdp > 0:
@@ -139,11 +139,11 @@ def calculate_cumulative_score(
 
     # 5. Renewable Energy (10%)
     renewable_score = clamp(renewable_pct, 0, 100)
-    renewable_component = 0.10 * renewable_score
+    renewable_component = 0.13 * renewable_score
 
     # 6. Public Approval (5%)
     approval_score = clamp(public_approval, 0, 100)
-    approval_component = 0.05 * approval_score
+    approval_component = 0.07 * approval_score
 
     final_score = (
         political_component +
@@ -623,6 +623,7 @@ elif st.session_state.game_over:  # <--- FIXED: using st.session_state.year
     st.success(f"🏆 SIMULATION COMPLETE. Final Sustainability Score: {score:.0f}")
     st.balloons()
     st.session_state.game_over = True	
+
 
 
 
